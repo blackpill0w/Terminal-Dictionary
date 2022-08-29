@@ -1,5 +1,15 @@
-import argparse, requests
-from rich import print as rprint
+#!/usr/bin/env python3
+
+import argparse, requests, sys
+try:
+    from rich import print as rprint
+    HIGHLIGHT: str = '[green]'
+    END_HIGHLIGHT: str = '[/green]'
+except ModuleNotFoundError:
+    sys.stderr.write("WARNING: the rich library is not installed, output will be printed with no color.\n\n")
+    HIGHLIGHT: str = '-> '
+    END_HIGHLIGHT: str = '-> '
+    rprint = print
 
 # URL used to fetch word's data
 # Usage: URL/word
@@ -17,13 +27,13 @@ def get_word_data(word: str) -> list | None:
     else:
         return resp.json()
 
-def parse_word_data(word_data: list) -> str:
+def format_word_data(word_data: list) -> str:
     '''
     Takes json data and returns a string to be displayed.
     '''
     res = ''
     for meaning in word_data[0]['meanings']:
-        res += f'[cyan]({meaning["partOfSpeech"]})[/cyan]\n'
+        res += f'{HIGHLIGHT}{meaning["partOfSpeech"]}{END_HIGHLIGHT}\n'
         for definition in meaning['definitions']:
             res += f'{definition["definition"]}\n'
     return res
@@ -43,7 +53,7 @@ def main():
     if word_data is None:
         print("Sorry, I couldn't find the word you are looking for.")
     else:
-        rprint(parse_word_data(word_data), end='')
+        rprint(format_word_data(word_data), end='')
 
 
 if __name__ == '__main__':

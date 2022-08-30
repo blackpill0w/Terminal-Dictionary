@@ -1,6 +1,6 @@
 # Terminal-Dictionary
 Look up words' definition from the terminal.
-# Requirements
-- Rich
+# Dependencies
+- Rich (optional), for colored output.
 # TODO
 - Add synonyms and antonyms

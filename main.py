@@ -39,7 +39,7 @@ def format_word_data(word_data: list) -> str:
     return res
 
 def main():
-    parser = argparse.ArgumentParser(prog='term-dict', description='Look up english words definition from the terminal')
+    parser = argparse.ArgumentParser(prog='dct', description='Look up english words definition from the terminal')
     parser.add_argument('word', help='word to be defined')
     parser.add_argument('-s', '--synonym', help='display synonyms', action='store_true')
     parser.add_argument('-a', '--antonym', help='display antonyms', action='store_true')

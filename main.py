@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 
-import argparse, requests, sys
 try:
+    import argparse, requests, sys
     from rich import print as rprint
     HIGHLIGHT: str = '[green]'
     END_HIGHLIGHT: str = '[/green]'
+except KeyboardInterrupt:
+    print('Exiting...')
+    exit()
 except ModuleNotFoundError:
     sys.stderr.write("WARNING: the rich library is not installed, output will be printed with no color.\n\n")
     HIGHLIGHT: str = '-> '
@@ -21,7 +24,11 @@ def get_word_data(word: str) -> list | None:
     The data is a list containing json data.
     None is return if it is not a valid word.
     '''
-    resp = requests.get(f'{DICTIONARY_URL}/{word}')
+    try:
+        resp = requests.get(f'{DICTIONARY_URL}/{word}')
+    except KeyboardInterrupt:
+        print('Exiting...')
+        exit()
     if not resp.ok:
         return None
     else:
@@ -57,4 +64,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('Exiting...')
+        exit()

@@ -3,8 +3,8 @@
 try:
     import argparse, requests, sys
     from rich import print as rprint
-    HIGHLIGHT: str = '[green]'
-    END_HIGHLIGHT: str = '[/green]'
+    HIGHLIGHT: str = '[cyan]'
+    END_HIGHLIGHT: str = '[/cyan]'
 except KeyboardInterrupt:
     print('Exiting...')
     exit()
@@ -29,6 +29,10 @@ def get_word_data(word: str) -> list | None:
     except KeyboardInterrupt:
         print('Exiting...')
         exit()
+    except (requests.exceptions.SSLError, requests.exceptions.ConnectionError):
+        print('Error: connection couldn\'t be established,',
+        'make sure you are connected to the internet.')
+        exit(1)
     if not resp.ok:
         return None
     else:
@@ -40,7 +44,7 @@ def format_word_data(word_data: list) -> str:
     '''
     res = ''
     for meaning in word_data[0]['meanings']:
-        res += f'{HIGHLIGHT}{meaning["partOfSpeech"]}{END_HIGHLIGHT}\n'
+        res += f'-- {HIGHLIGHT}{meaning["partOfSpeech"]}{END_HIGHLIGHT}\n'
         for definition in meaning['definitions']:
             res += f'{definition["definition"]}\n'
     return res
@@ -57,6 +61,7 @@ def main():
         print('Error: using --no-def/-n requires --synonym/-s or --antonym/-a')
         exit(1)
     word_data = get_word_data(args.word)
+
     if word_data is None:
         print("Sorry, I couldn't find the word you are looking for.")
     else:
